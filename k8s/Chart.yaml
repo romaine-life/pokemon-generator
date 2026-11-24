@@ -1,0 +1,6 @@
+apiVersion: v2
+name: pokemon-generator
+description: pokemon-generator.romaine.life, a page that invents a new Pokémon-style creature from any word.
+type: application
+version: 0.1.0
+appVersion: "0.1.0"

@@ -1,0 +1,13 @@
+{
+  "name": "pokemon-generator-page",
+  "version": "1.0.0",
+  "private": true,
+  "description": "The page pokemon-generator serves; its checks run in the web-app suite.",
+  "scripts": {
+    "lint": "node --check static/app.js",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": "22.x"
+  }
+}

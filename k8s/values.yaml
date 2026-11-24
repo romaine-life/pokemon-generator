@@ -1,0 +1,36 @@
+# The image by tag and digest, rewritten by the suite's pin PR on each release. The first
+# release's pin PR replaces this placeholder, which names no image.
+image: romainecr.azurecr.io/pokemon-generator:unreleased@sha256:0000000000000000000000000000000000000000000000000000000000000000
+imagePullPolicy: IfNotPresent
+
+replicas: 2
+
+publicUrl: https://pokemon-generator.romaine.life
+
+service:
+  port: 80
+  targetPort: http
+
+container:
+  port: 8080
+
+# Generating a creature takes a few milliseconds of CPU; the API's answers are cached by
+# browsers, so this is generous.
+resources:
+  requests:
+    cpu: 10m
+    memory: 24Mi
+  limits:
+    cpu: 250m
+    memory: 96Mi
+
+gateway:
+  hostname: pokemon-generator.romaine.life
+  parentGateway:
+    group: gateway.networking.k8s.io
+    kind: Gateway
+    name: main
+    namespace: envoy-gateway-system
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer

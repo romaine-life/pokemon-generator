@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{.Title}}</title>
+  <meta name="description" content="{{.Description}}">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="{{.Title}}">
+  <meta property="og:description" content="{{.Description}}">
+  <meta property="og:image" content="{{.Image}}">
+  <meta property="og:url" content="{{.URL}}">
+  <meta name="twitter:card" content="summary">
+  <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/static/style.css">
+  <script src="/static/app.js" defer></script>
+</head>
+<body data-version="{{.Version}}">
+  <header class="top">
+    <h1><span class="ball" aria-hidden="true"></span>Pokémon Generator</h1>
+    <p class="tag">Every word hides a Pokémon nobody has seen before.</p>
+  </header>
+
+  <form id="controls" class="controls" autocomplete="off">
+    <label class="seed">
+      <span>Find the Pokémon of…</span>
+      <input id="seed" name="seed" maxlength="64" placeholder="your name, your cat, spaghetti…" enterkeyhint="go">
+    </label>
+    <label class="lock">
+      <span>Type</span>
+      <select id="type" name="type"><option value="">Any type</option></select>
+    </label>
+    <button type="submit" class="find">Find it</button>
+    <button type="button" id="random" class="random" title="Shortcut: Space">Surprise me!</button>
+  </form>
+
+  <main id="card" class="card" aria-live="polite">
+    <section class="art">
+      <div class="badges"><span id="shiny" class="badge shiny" hidden>✦ Shiny</span><span id="legendary" class="badge legendary" hidden>Legendary</span></div>
+      <div id="stage-bg" class="stage-bg">
+        <canvas id="sprite" width="320" height="320" aria-label=""></canvas>
+        <div id="status" class="status" hidden></div>
+      </div>
+      <div class="actions">
+        <button type="button" id="share">Copy link</button>
+        <a id="download" href="#" download>Download sprite</a>
+      </div>
+      <h3 class="evo-title">Evolution line</h3>
+      <ol id="evolution" class="evolution"></ol>
+    </section>
+
+    <section class="info">
+      <div class="heading">
+        <span id="number" class="number">#????</span>
+        <h2 id="name">…</h2>
+      </div>
+      <p id="category" class="category"></p>
+      <div id="types" class="types"></div>
+      <dl class="facts">
+        <div><dt>Height</dt><dd id="height">–</dd></div>
+        <div><dt>Weight</dt><dd id="weight">–</dd></div>
+        <div><dt>Body</dt><dd id="body">–</dd></div>
+      </dl>
+      <p id="entry" class="entry"></p>
+
+      <h3>Base stats</h3>
+      <table id="stats" class="stats"></table>
+
+      <h3>Abilities</h3>
+      <ul id="abilities" class="abilities"></ul>
+
+      <h3>Moves</h3>
+      <table id="moves" class="moves">
+        <thead><tr><th>Move</th><th>Type</th><th>Kind</th><th>Pow</th><th>Acc</th><th>PP</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </section>
+  </main>
+
+  <section class="recent-wrap">
+    <h3>Recently found</h3>
+    <ol id="recent" class="recent"></ol>
+  </section>
+
+  <footer>
+    Every creature here is invented on the spot from its seed: the same word always finds the same one.
+    <span class="version">{{.Version}}</span>
+  </footer>
+</body>
+</html>

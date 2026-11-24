@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: pokemon-generator
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: pokemon-generator
+spec:
+  type: ClusterIP
+  selector:
+    app: pokemon-generator
+  ports:
+    - name: http
+      port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.targetPort | quote }}
+      protocol: TCP
