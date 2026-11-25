@@ -10,6 +10,7 @@ ARG APP_VERSION=dev
 
 COPY go.mod ./
 COPY cmd ./cmd
+COPY gen ./gen
 COPY internal ./internal
 COPY web ./web
 RUN --mount=type=cache,id=pokemon-generator-go-build,target=/root/.cache/go-build \

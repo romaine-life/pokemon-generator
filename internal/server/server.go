@@ -14,7 +14,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/romaine-life/pokemon-generator/internal/gen"
+	"github.com/romaine-life/pokemon-generator/gen"
 )
 
 // Config is what the server needs from its environment.

@@ -27,11 +27,11 @@ are drawn.
 
 | Path | Holds |
 | --- | --- |
-| `internal/gen/monster.go` | `Generate`: a seed becomes a family (body plan, types, number of stages, legendary, shiny, name fragment, stat shape, abilities), then the requested stage |
-| `internal/gen/types.go`, `archetypes.go` | The eighteen types and nine body plans, and the words each brings |
-| `internal/gen/sprite.go`, `canvas.go` | The sprite: a 40×40 grid drawn from shapes per body plan, mirror-symmetric except the tail |
-| `internal/gen/color.go`, `png.go` | Palette, shading and outlines; the PNG |
-| `internal/gen/text.go` | Moves and dex entries |
+| `gen/monster.go` | `Generate`: a seed becomes a family (body plan, types, number of stages, legendary, shiny, name fragment, stat shape, abilities), then the requested stage |
+| `gen/types.go`, `archetypes.go` | The eighteen types and nine body plans, and the words each brings |
+| `gen/sprite.go`, `canvas.go` | The sprite: a 40×40 grid drawn from shapes per body plan, mirror-symmetric except the tail |
+| `gen/color.go`, `png.go` | Palette, shading and outlines; the PNG |
+| `gen/text.go` | Moves and dex entries |
 | `internal/server` | The HTTP routes |
 | `web/static` | The page (`index.html` is a template the server fills with share-card tags) |
 | `web/package.json`, `web/page.test.mjs` | The page's checks: `npm run lint` checks `app.js` parses, `npm test` that every element it looks up is in `index.html` |
@@ -42,6 +42,9 @@ so the same address always gives the same creature. Sprite traits are keyed by n
 (`ge.f("legH", …)`) rather than drawn in sequence, so every stage of an evolution line
 reads the same body and they look related; later stages are drawn larger, with smaller
 heads and longer horns and ears. A drawing that leaves the grid is redrawn smaller.
+
+`gen` is a public package: pokosmari imports it at a pinned module version to make its creatures, so a
+change here reaches that game only when it takes the new version up.
 
 `gen.Version` names the generator; what a seed gives can change between releases. The page
 puts the release in every address it asks for (`v=`), so the browser's cached answers
@@ -67,7 +70,7 @@ go run ./cmd/pokemon-generator          # http://localhost:8080
 go run ./cmd/pokemon-generator --self-test
 ```
 
-`PREVIEW_OUT=sheet.png go test ./internal/gen -run Preview` draws a contact sheet of 54
+`PREVIEW_OUT=sheet.png go test ./gen -run Preview` draws a contact sheet of 54
 creatures, for looking at a sprite change; add `PREVIEW_LINES=1` for evolution lines side
 by side.
 
