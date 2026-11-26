@@ -4,12 +4,18 @@ FROM artifacts.home.romaine.life/dockerhub/library/golang:1.26-alpine@sha256:30b
 WORKDIR /src
 ENV GOPROXY=https://artifacts.home.romaine.life/go/go,direct
 ENV GOMAXPROCS=4 GOFLAGS=-p=4
+# Our Go modules (github.com/romaine-life/*) come from Forgejo through git, which has a new tag
+# at once; the home proxy has it later. The image suite passes GOPRIVATE and GONOSUMDB, and the
+# git settings, signed in, as the secret go-private-git for go mod download alone
+# (pipeline-templates suites/README.md, Our Go modules in an image; PIPT-61).
+RUN sed -i 's#https\?://dl-cdn.alpinelinux.org/alpine#https://artifacts.home.romaine.life/alpine/alpine#' /etc/apk/repositories && apk add --no-cache git
+ARG GOPRIVATE GONOSUMDB
 # The release this build is (the web-app suite passes the tag), shown in the page's footer and
 # put in the page's addresses so browsers never keep an older release's answers.
 ARG APP_VERSION=dev
 
 COPY go.mod go.sum ./
-RUN --mount=type=cache,id=pokemon-generator-go-mod,target=/go/pkg/mod go mod download
+RUN --mount=type=secret,id=go-private-git,target=/root/.gitconfig --mount=type=cache,id=pokemon-generator-go-mod,target=/go/pkg/mod go mod download
 COPY cmd ./cmd
 COPY gen ./gen
 COPY internal ./internal
