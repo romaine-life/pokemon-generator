@@ -1,6 +1,6 @@
 # The image by tag and digest, rewritten by the suite's pin PR on each release. The first
 # release's pin PR replaces this placeholder, which names no image.
-image: romainecr.azurecr.io/pokemon-generator:v0.1.3@sha256:a4d9be41292dea6b607331c822d8cf2b2adfd8993ef517d4c0f88eefbea19120
+image: romainecr.azurecr.io/pokemon-generator:v0.1.4@sha256:b2b4831815409d4b46ca87fe5c28f1fda953ff5f5d711639ce0d7da749c6992f
 imagePullPolicy: IfNotPresent
 
 replicas: 2
