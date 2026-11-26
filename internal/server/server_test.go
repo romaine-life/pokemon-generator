@@ -1,21 +1,22 @@
 package server
 
 import (
+	"bytes"
 	"encoding/json"
 	"io"
-	"log/slog"
 	"net/http"
 	"net/http/httptest"
 	"strings"
 	"testing"
 
+	"github.com/romaine-life/logline"
 	"github.com/romaine-life/pokemon-generator/web"
 )
 
 func newTestServer(t *testing.T) *httptest.Server {
 	t.Helper()
 	h, err := New(Config{Static: web.Static(), PublicURL: "https://pg.test", Version: "test",
-		Log: slog.New(slog.NewTextHandler(io.Discard, nil))})
+		Log: logline.New(io.Discard)})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -110,5 +111,43 @@ func TestSpriteDownload(t *testing.T) {
 	}
 	if cd := res.Header.Get("Content-Disposition"); !strings.HasPrefix(cd, "attachment; filename=") || !strings.HasSuffix(cd, `.png"`) {
 		t.Fatalf("disposition %q", cd)
+	}
+}
+
+// Each request but a health check is one standard line on the log.
+func TestRequestsAreLogged(t *testing.T) {
+	var logs bytes.Buffer
+	h, err := New(Config{Static: web.Static(), PublicURL: "https://pg.test", Version: "test", Log: logline.New(&logs)})
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, path := range []string{"/healthz", "/api/monster?seed=nelson&type=fire", "/api/types"} {
+		h.ServeHTTP(httptest.NewRecorder(), httptest.NewRequest("GET", path, nil))
+	}
+	want := []map[string]string{
+		{"method": "GET", "path": "/api/monster", "query": "seed=nelson&type=fire", "status": "200"},
+		{"method": "GET", "path": "/api/types", "query": "", "status": "200"},
+	}
+	lines := strings.Split(strings.TrimSuffix(logs.String(), "\n"), "\n")
+	if len(lines) != len(want) {
+		t.Fatalf("want %d lines, health checks unlogged: %q", len(want), logs.String())
+	}
+	for i, line := range lines {
+		e, err := logline.Parse(line)
+		if err != nil {
+			t.Fatalf("not the standard line (%v): %q", err, line)
+		}
+		got := map[string]string{}
+		for _, f := range e.Fields {
+			got[f.Key] = f.Value
+		}
+		if e.Level != logline.Info || e.Message != "request" || got["ms"] == "" {
+			t.Errorf("line %d: %q", i, line)
+		}
+		for k, v := range want[i] {
+			if got[k] != v {
+				t.Errorf("line %d: %s = %q, want %q", i, k, got[k], v)
+			}
+		}
 	}
 }

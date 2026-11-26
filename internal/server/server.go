@@ -8,21 +8,21 @@ import (
 	"fmt"
 	"html/template"
 	"io/fs"
-	"log/slog"
 	"net/http"
 	"net/url"
 	"strconv"
 	"time"
 
+	"github.com/romaine-life/logline"
 	"github.com/romaine-life/pokemon-generator/gen"
 )
 
 // Config is what the server needs from its environment.
 type Config struct {
-	Static    fs.FS  // the page files: index.html, app.js, style.css, favicon.svg
-	PublicURL string // the site's origin, for share-card links
-	Version   string // the release this build is
-	Log       *slog.Logger
+	Static    fs.FS           // the page files: index.html, app.js, style.css, favicon.svg
+	PublicURL string          // the site's origin, for share-card links
+	Version   string          // the release this build is
+	Log       *logline.Logger // the service's log: stdout, which the cluster keeps
 }
 
 type server struct {

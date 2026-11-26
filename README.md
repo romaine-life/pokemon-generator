@@ -59,7 +59,9 @@ puts the release in every address it asks for (`v=`), so the browser's cached an
 | `GET /sprite.png?seed=&type=&stage=&scale=` | The sprite, each pixel `scale` (1–16, default 8) pixels square; `download=1` saves it under the creature's name |
 | `GET /healthz` | `{"status": "ok", "version", "generator"}` |
 
-Each request is logged as one JSON line on stdout.
+Each request is logged on stdout as one line in the estate's standard format
+([logline](https://forgejo.romaine.life/romaine-life/logline)), e.g.
+`2026-11-26T09:12:10.022-08:00 pid=1 info request method=GET path=/api/monster query="seed=nelson" status=200 ms=2`.
 
 ## Running and testing
 

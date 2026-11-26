@@ -8,12 +8,14 @@ ENV GOMAXPROCS=4 GOFLAGS=-p=4
 # put in the page's addresses so browsers never keep an older release's answers.
 ARG APP_VERSION=dev
 
-COPY go.mod ./
+COPY go.mod go.sum ./
+RUN --mount=type=cache,id=pokemon-generator-go-mod,target=/go/pkg/mod go mod download
 COPY cmd ./cmd
 COPY gen ./gen
 COPY internal ./internal
 COPY web ./web
-RUN --mount=type=cache,id=pokemon-generator-go-build,target=/root/.cache/go-build \
+RUN --mount=type=cache,id=pokemon-generator-go-mod,target=/go/pkg/mod \
+    --mount=type=cache,id=pokemon-generator-go-build,target=/root/.cache/go-build \
     CGO_ENABLED=0 go build -trimpath -ldflags="-s -w -X main.version=${APP_VERSION}" -o /out/pokemon-generator ./cmd/pokemon-generator
 
 FROM artifacts.home.romaine.life/gcr/distroless/static-debian12:nonroot@sha256:afa5c872c891853ca7fcf1f12c3edb23f7eeef36189728842dd51042ff57f7ab

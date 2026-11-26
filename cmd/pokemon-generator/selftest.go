@@ -4,11 +4,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"log/slog"
 	"net/http"
 	"net/http/httptest"
 	"strings"
 
+	"github.com/romaine-life/logline"
 	"github.com/romaine-life/pokemon-generator/internal/server"
 	"github.com/romaine-life/pokemon-generator/web"
 )
@@ -17,7 +17,7 @@ import (
 // expects.
 func runSelfTest() error {
 	h, err := server.New(server.Config{Static: web.Static(), PublicURL: "https://example.test", Version: version,
-		Log: slog.New(slog.NewTextHandler(io.Discard, nil))})
+		Log: logline.New(io.Discard)})
 	if err != nil {
 		return err
 	}
