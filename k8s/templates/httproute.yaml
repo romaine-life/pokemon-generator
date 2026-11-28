@@ -11,9 +11,6 @@ spec:
       kind: {{ .Values.gateway.parentGateway.kind | quote }}
       name: {{ .Values.gateway.parentGateway.name | quote }}
       namespace: {{ .Values.gateway.parentGateway.namespace | quote }}
-    - group: gateway.networking.x-k8s.io
-      kind: XListenerSet
-      name: pokemon-generator
     - group: gateway.networking.k8s.io
       kind: ListenerSet
       name: pokemon-generator

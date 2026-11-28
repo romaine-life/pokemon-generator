@@ -1,6 +1,5 @@
-# The same HTTPS listener as a standard ListenerSet (AUT-13). Envoy Gateway v1.7.2 reads
-# only XListenerSet and v1.8+ only ListenerSet, so both carry it until the gateway's
-# upgrade, after which the XListenerSet is removed.
+# The app's HTTPS listener, attached cross-namespace to the shared Gateway (standard
+# Gateway API ListenerSet, gateway.networking.k8s.io/v1).
 apiVersion: gateway.networking.k8s.io/v1
 kind: ListenerSet
 metadata:
